@@ -1,0 +1,30 @@
+{
+  "name": "basic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "demo": "tsx scripts/demo.ts",
+    "start": "npm run demo",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Sky-me-Rainbow@github.com/Sky-me-Rainbow/Ethereum-base.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sky-me-Rainbow/Ethereum-base/issues"
+  },
+  "homepage": "https://github.com/Sky-me-Rainbow/Ethereum-base#readme",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "ethers": "^6.15.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
