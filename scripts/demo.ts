@@ -2,9 +2,9 @@ import 'dotenv/config';
 import { getLatestBlockNumber, getEthBalance, getUsdtBalance } from '../src/web3';
 
 async function main() {
-	const address = process.env.ADDRESS || '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+	const address = process.env.WALLET_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
 	// if (!address) {
-	// 	throw new Error('Missing Wallet address. Set ADDRESS in .env');
+	// 	throw new Error('Missing Wallet address. Set WALLET_ADDRESS in .env');
 	// }
 
 	const block = await getLatestBlockNumber();
