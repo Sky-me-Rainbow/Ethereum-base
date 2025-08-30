@@ -5,7 +5,9 @@ const ERC20_ABI = [
 	// balanceOf(address)
 	'function balanceOf(address owner) view returns (uint256)',
 	// decimals() may be needed to format, but USDT is 6 on mainnet
-	'function decimals() view returns (uint8)'
+	'function decimals() view returns (uint8)',
+	// transfer(address,uint256)
+	'function transfer(address to, uint256 amount) returns (bool)'
 ];
 
 function getProvider(): ethers.JsonRpcProvider {
@@ -36,4 +38,22 @@ export async function getUsdtBalance(address: string, tokenAddress: string = USD
 		erc20.decimals() as Promise<number>
 	]);
 	return ethers.formatUnits(raw, decimals);
+}
+
+export async function sendEth(privateKey: string, to: string, amountEth: string) {
+    const provider = getProvider();
+    const wallet = new ethers.Wallet(privateKey, provider);
+    const tx = await wallet.sendTransaction({ to, value: ethers.parseEther(amountEth) });
+    return tx;
+}
+
+export async function sendUsdt(privateKey: string, to: string, amount: string, tokenAddress: string = USDT_MINT_ADDRESS) {
+    const provider = getProvider();
+    const wallet = new ethers.Wallet(privateKey, provider);
+    const erc20 = new ethers.Contract(tokenAddress, ERC20_ABI, wallet);
+    // fetch decimals to convert amount
+    const decimals: number = await erc20.decimals();
+    const amountUnits = ethers.parseUnits(amount, decimals);
+    const tx = await erc20.transfer(to, amountUnits);
+    return tx;
 } 
