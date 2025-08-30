@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 
-// const USDT_MINT_ADDRESS = process.env.USDT_MINT_ADDRESS || '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-const IJS_MINT_ADDRESS = process.env.IJS_MINT_ADDRESS || '0x0000000000000000000000000000000000000000';
+const USDT_MINT_ADDRESS = process.env.USDT_MINT_ADDRESS || '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+const IJS_MINT_ADDRESS = process.env.IJS_MINT_ADDRESS || '0x3285F997da271fccf95337E192c8FAE15D22023e';
 
 const ERC20_ABI = [
 	// balanceOf(address)
@@ -13,7 +13,7 @@ const ERC20_ABI = [
 ];
 
 function getProvider(): ethers.JsonRpcProvider {
-	const rpcUrl = process.env.BASE_SEPOLIA_RPC_URL || 'https://ethereum-rpc.publicnode.com';
+	const rpcUrl = process.env.BASE_SEPOLIA_RPC_URL;
 	// if (!rpcUrl) {
 	// 	throw new Error('Missing RPC URL. Set ETH_RPC_URL in .env');
 	// }
@@ -32,7 +32,7 @@ export async function getEthBalance(address: string): Promise<string> {
 	return ethers.formatEther(balanceWei);
 }
 
-export async function getUsdtBalance(address: string, tokenAddress: string = IJS_MINT_ADDRESS): Promise<string> {
+export async function getSpecificTokenBalance(address: string, tokenAddress: string = IJS_MINT_ADDRESS): Promise<string> {
 	const provider = getProvider();
 	const erc20 = new ethers.Contract(tokenAddress, ERC20_ABI, provider);
 	const [raw, decimals] = await Promise.all([
@@ -42,14 +42,14 @@ export async function getUsdtBalance(address: string, tokenAddress: string = IJS
 	return ethers.formatUnits(raw, decimals);
 }
 
-export async function sendEth(privateKey: string, to: string, amountEth: string) {
+export async function sendETH(privateKey: string, to: string, amountEth: string) {
     const provider = getProvider();
     const wallet = new ethers.Wallet(privateKey, provider);
     const tx = await wallet.sendTransaction({ to, value: ethers.parseEther(amountEth) });
     return tx;
 }
 
-export async function sendUsdt(privateKey: string, to: string, amount: string, tokenAddress: string = IJS_MINT_ADDRESS) {
+export async function sendSpecificToken(privateKey: string, to: string, amount: string, tokenAddress: string = IJS_MINT_ADDRESS) {
     const provider = getProvider();
     const wallet = new ethers.Wallet(privateKey, provider);
     const erc20 = new ethers.Contract(tokenAddress, ERC20_ABI, wallet);
